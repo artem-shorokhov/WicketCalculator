@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+	<head>
+		<style type="text/css">
+			input[type=text] {
+				width: 385px;
+				height: 38px;
+				text-align: right;
+				font-size: 30px;
+				padding: 5px 5px;
+				border: none;
+			    color: white;
+			    background-color: lightblue;
+			}
+			
+			input {
+				width: 75px;
+				height: 75px;
+				background-color: #008CBA;
+			    border: none;
+			    border-radius: 8px;
+			    color: white;
+			    padding: 15px 15px;
+			    text-align: center;
+			    text-decoration: none;
+			    display: inline-block;
+			    font-size: 30px;
+			}
+			
+			#wide_btn {
+				width: 155px;  height: 75px;
+			}
+			
+			#high_btn {
+				width: 75px;  height: 155px;
+			}
+		</style>
+		<title>Calculator</title>
+	</head>
+	<body>
+			<form>
+				<table align="center">
+					<tr>
+						<td colspan="5"><input type="text" value=""/></td>
+					</tr>
+					<tr>
+						<td><input type="submit" value="7"/></td>
+						<td><input type="submit" value="8"/></td>
+						<td><input type="submit" value="9"/></td>
+						<td><input type="submit" value="/"/></td>
+						<td><input type="reset" value="C"/></td>
+					</tr>
+					<tr>
+						<td><input type="submit" value="4"/></td>
+						<td><input type="submit" value="5"/></td>
+						<td><input type="submit" value="6"/></td>
+						<td><input type="submit" value="*"/></td>
+						<td><input type="submit" value="&plusmn;"/></td>
+					</tr>
+					<tr>
+						<td><input type="submit" value="1"/></td>
+						<td><input type="submit" value="2"/></td>
+						<td><input type="submit" value="3"/></td>
+						<td><input type="submit" value="-"/></td>
+						<td rowspan="2"><input type="submit" id="high_btn" value="="/></td>
+					</tr>
+					<tr>
+						<td colspan="2"><input type="submit" id="wide_btn" value="0"/></td>
+						<td><input type="submit" value="."/></td>
+						<td><input type="submit" value="+"/></td>
+					</tr>
+				</table>
+			</form>
+	</body>
+</html>
