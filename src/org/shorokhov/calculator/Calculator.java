@@ -101,7 +101,14 @@ public class Calculator extends WebPage {
     private String calculate(String expression) {
     	
     	String[] arguments = expression.split(" ");
-    	BigDecimal result = new BigDecimal(arguments[0]);
+    	
+    	BigDecimal result;
+    	
+    	try {
+    		result = new BigDecimal(arguments[0]);
+    	} catch(NumberFormatException e) {
+			throw new IllegalArgumentException(String.format("NaN (argument '%s' is not a decimal number).", arguments[0]));
+		}	
     	
     	for (int i = 1; i + 1 < arguments.length; i += 2) {
     		
