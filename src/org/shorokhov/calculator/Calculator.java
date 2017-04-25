@@ -2,6 +2,7 @@ package org.shorokhov.calculator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.Model;
@@ -135,8 +136,14 @@ public class Calculator extends WebPage {
 	    			throw new IllegalArgumentException();
     		}
     	}
-    	    	
-    	return result.stripTrailingZeros().toString();
+    	
+    	// make output readable
+    	DecimalFormat df = new DecimalFormat();
+    	df.setMaximumFractionDigits(PRECISION);
+    	df.setMinimumFractionDigits(0);
+    	df.setGroupingUsed(false); 
+    	
+    	return df.format(result);
     }
 }
 
