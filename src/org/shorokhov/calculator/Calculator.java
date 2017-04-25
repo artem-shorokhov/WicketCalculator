@@ -15,19 +15,18 @@ import org.apache.wicket.markup.html.form.TextField;
  * Class represents calculator implementation using Apache Wicket.
  * 
  * It takes {@code String} expression as an input and calculates it.
- * Expression should consist of decimal numbers and actions
+ * Expression should consist of decimal numbers and operations
  * separated by spaces. Calculation is performed consequently.
- * In example: 2 + 2 / 2 would be calculated as 8.
+ * In example: 2 + 2 * 2 would be calculated as 8.
  * If expression contains unrecognizable arguments and/or actions,
  * {@code NaN} would be shown as answer. Also it keeps track of
  * expresion history.
  * 
  * @author Artem Shorokhov
  */
-
+@SuppressWarnings("serial")
 public class Calculator extends WebPage {
 
-	private static final long serialVersionUID = 1L;
 	private static final int PRECISION = 10;
 
 	/**
@@ -40,8 +39,6 @@ public class Calculator extends WebPage {
 		final TextArea<String> historyField = new TextArea<String>("history",  Model.of(""));
 		
 		Form<?> form = new Form<Object>("form") {
-
-			private static final long serialVersionUID = 1L;
 			
 			// "="-button action
 			@Override
@@ -51,7 +48,7 @@ public class Calculator extends WebPage {
 				String history = (String) historyField.getModelObject();
 				String result = "";
 				
-				// if-else blocks to control history and input field content
+				// if-else blocks to handle corner-cases for history and input fields
 				if (expression == null) {
 					if (history == null) {
 						history = "";
@@ -60,7 +57,7 @@ public class Calculator extends WebPage {
 					try {
 						result = calculate(expression);
 					} catch(IllegalArgumentException e) {
-						result = "NaN";
+						result = e.getMessage();
 					}
 					if (history == null) {
 						history = String.format("%s%n= %s", expression, result);
@@ -68,18 +65,17 @@ public class Calculator extends WebPage {
 						history = String.format("%s\n%s\n= %s", history, expression, result);
 					}
 				}
-				
-				// filling input field and textarea content 
+
 				expressionField.setModel(Model.of(result));
 				historyField.setModel(Model.of(history));
 			}
 		};
 		
+		form.add(expressionField);
+		form.add(historyField);
+
 		Button clear = new Button("clearButton") {
 
-			private static final long serialVersionUID = 1L;
-			
-			// clear-button action
 			@Override
 			public void onSubmit() {
             	expressionField.setModel(Model.of(""));
@@ -88,17 +84,15 @@ public class Calculator extends WebPage {
         
         clear.setDefaultFormProcessing(false);
         form.add(clear);
-		
-		form.add(expressionField);
-		form.add(historyField);
+	
 		add(form);
     }
-    
+  
 	/**
 	 * Method takes {@code String} expression as an input and calculates it.
-	 * Expression should consist of decimal numbers and actions
+	 * Expression should consist of decimal numbers and operations
 	 * separated by spaces. Calculation is performed consequently.
-	 * In example: 2 + 2 / 2 would be calculated as 8.
+	 * In example: 2 + 2 * 2 would be calculated as 8.
 	 * 
 	 * @param expression {@code String} representation of expression obtained from input field.
 	 * @return {@code String} representation of expression calculation.
@@ -114,9 +108,9 @@ public class Calculator extends WebPage {
     		BigDecimal argument;
     		
     		try {
-    			argument= new BigDecimal(arguments[i + 1]);
+    			argument = new BigDecimal(arguments[i + 1]);
     		} catch(NumberFormatException e) {
-    			throw new IllegalArgumentException();
+    			throw new IllegalArgumentException(String.format("NaN (argument '%s' is not a decimal number).", arguments[i + 1]));
     		}
     		
     		switch(arguments[i]) {
@@ -130,13 +124,27 @@ public class Calculator extends WebPage {
 	    			result = result.multiply(argument);
 	    			break;
 	    		case ("/"):
-	    			result = result.divide(argument, PRECISION, RoundingMode.HALF_UP);
-	    			break;    		
+	        		try {
+	        			result = result.divide(argument, PRECISION, RoundingMode.HALF_UP);
+	        		} catch(ArithmeticException e) {
+	        			throw new IllegalArgumentException("NaN (division by 0).");
+	        		}
+	    			break;
+	    		case ("mod"):
+	    			result = result.remainder(argument);
+	    			break;
+	    		case ("pow"):
+	    			try {
+	    				result = result.pow(Integer.parseInt(arguments[i + 1]));
+	    			} catch(NumberFormatException e) {
+	        			throw new IllegalArgumentException(String.format("NaN (power '%s' is not an int).", arguments[i + 1]));
+	        		}
+	    			break;
 	    		default:
-	    			throw new IllegalArgumentException();
+	    			throw new IllegalArgumentException(String.format("NaN (operator '%s' is not supported).", arguments[i]));
     		}
     	}
-    	
+
     	// make output readable
     	DecimalFormat df = new DecimalFormat();
     	df.setMaximumFractionDigits(PRECISION);

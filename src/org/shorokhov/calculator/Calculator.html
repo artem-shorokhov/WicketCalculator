@@ -3,6 +3,10 @@
 	<head>
 		<style type="text/css">
 
+			* {
+				font-family: garamond;
+			}
+
 			input {
 				width: 75px;
 				height: 75px;
@@ -10,7 +14,7 @@
 			    border: none;
 			    border-radius: 8px;
 			    color: white;
-			    padding: 15px 15px;
+			    
 			    text-align: center;
 			    text-decoration: none;
 			    display: inline-block;
@@ -32,6 +36,13 @@
 				width: 155px;
 			}
 			
+			#label {
+				width: 155px;
+				background-color: white;
+				color: #008CBA;
+				border: 2px solid #008CBA;
+			}
+			
 			#high_btn {
 				height: 155px;
 			}
@@ -43,6 +54,7 @@
 				border: none;
 			    color: white;
 			    background-color: lightblue;
+			    width: 385px;
 			}
 			
 			table.center {
@@ -57,10 +69,16 @@
 			<form wicket:id="form" name="calculator">
 				<table class="center">
 					<tr>
-						<td colspan="5"><textarea readonly id="history" wicket:id="history" rows="10" cols="41"></textarea></td>
+						<td colspan="5"><textarea readonly id="history" wicket:id="history" rows="10" ></textarea></td>
 					</tr>
 					<tr>
-						<td colspan="5"><input type="text" id="expression" wicket:id="expression" value=""/></td>
+						<td colspan="5"><input readonly type="text" id="expression" wicket:id="expression" value=""/></td>
+					</tr>
+					<tr>
+						<td colspan="2"><input type="button" id="label" value="CASIO"/></td>
+						<td><input type="button" value="pow" onClick="document.calculator.expression.value+=' pow '"/></td>
+						<td><input type="button" value="mod" onClick="document.calculator.expression.value+=' mod '"/></td>
+						<td><input type="button" value="<" onClick="document.calculator.expression.value=document.calculator.expression.value.slice(0, -1)"/></td>
 					</tr>
 					<tr>
 						<td><input type="button" value="7" onClick="document.calculator.expression.value+='7'"/></td>
