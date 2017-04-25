@@ -10,4 +10,4 @@ Features:
 
 Example: 2 + 2 * -2 = -8
 
-calculator.zip contains exploded war ready to deploy on webcontainer like Tomcat.
+<b>calculator.zip</b> contains exploded war ready to deploy on webcontainer like Tomcat.
