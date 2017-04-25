@@ -10,14 +10,31 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 
+/**
+ * Class represents calculator implementation using Apache Wicket.
+ * 
+ * It takes {@code String} expression as an input and calculates it.
+ * Expression should consist of decimal numbers and actions
+ * separated by spaces. Calculation is performed consequently.
+ * In example: 2 + 2 / 2 would be calculated as 8.
+ * If expression contains unrecognizable arguments and/or actions,
+ * {@code NaN} would be shown as answer. Also it keeps track of
+ * expresion history.
+ * 
+ * @author Artem Shorokhov
+ */
 
 public class Calculator extends WebPage {
 
 	private static final long serialVersionUID = 1L;
 	private static final int PRECISION = 10;
 
+	/**
+	 * Default constructor which is responsible for the form content.
+	 */
 	public Calculator() {
- 	
+
+		// binding form elements 
     	final TextField<String> expressionField = new TextField<String>("expression", Model.of(""));
 		final TextArea<String> historyField = new TextArea<String>("history",  Model.of(""));
 		
@@ -25,6 +42,7 @@ public class Calculator extends WebPage {
 
 			private static final long serialVersionUID = 1L;
 			
+			// "="-button action
 			@Override
 			public void onSubmit() {
 				
@@ -32,13 +50,14 @@ public class Calculator extends WebPage {
 				String history = (String) historyField.getModelObject();
 				String result = "";
 				
+				// if-else blocks to control history and input field content
 				if (expression == null) {
 					if (history == null) {
 						history = "";
 					} 
 				} else {
 					try {
-						result = evaluate(expression);
+						result = calculate(expression);
 					} catch(IllegalArgumentException e) {
 						result = "NaN";
 					}
@@ -49,6 +68,7 @@ public class Calculator extends WebPage {
 					}
 				}
 				
+				// filling input field and textarea content 
 				expressionField.setModel(Model.of(result));
 				historyField.setModel(Model.of(history));
 			}
@@ -57,7 +77,9 @@ public class Calculator extends WebPage {
 		Button clear = new Button("clearButton") {
 
 			private static final long serialVersionUID = 1L;
-
+			
+			// clear-button action
+			@Override
 			public void onSubmit() {
             	expressionField.setModel(Model.of(""));
             }
@@ -71,7 +93,17 @@ public class Calculator extends WebPage {
 		add(form);
     }
     
-    private String evaluate(String expression) {
+	/**
+	 * Method takes {@code String} expression as an input and calculates it.
+	 * Expression should consist of decimal numbers and actions
+	 * separated by spaces. Calculation is performed consequently.
+	 * In example: 2 + 2 / 2 would be calculated as 8.
+	 * 
+	 * @param expression {@code String} representation of expression obtained from input field.
+	 * @return {@code String} representation of expression calculation.
+	 * @throws IllegalArgumentException if expression contains unrecognizable arguments and/or actions.
+	 */
+    private String calculate(String expression) {
     	
     	String[] arguments = expression.split(" ");
     	BigDecimal result = new BigDecimal(arguments[0]);
@@ -104,7 +136,7 @@ public class Calculator extends WebPage {
     		}
     	}
     	    	
-    	return result.toString();
+    	return result.stripTrailingZeros().toString();
     }
 }
 
