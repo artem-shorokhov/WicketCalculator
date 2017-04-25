@@ -1,47 +1,54 @@
 package org.shorokhov.calculator;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.Model;
 
-
-public class Calculator extends WebPage {
-
+@SuppressWarnings("hiding")
+public class CalculatorForm<Object> extends Form<Object> {
+	
 	private static final long serialVersionUID = 1L;
-	private static final int PRECISION = 10;
 
-	public Calculator() {
- 	
-    	final TextField<String> expressionField = new TextField<String>("expression", Model.of(""));
-		final TextArea<String> historyField = new TextArea<String>("history",  Model.of(""));
+	private String expression;
+	private String history;
+	
+	public CalculatorForm(String name) {
 		
-		Form<?> form = new Form<Object>("form") {
+        super(name);
+        
 
+        
+        
+        
+        add(new Button("evaluateButton") {
+        	
 			private static final long serialVersionUID = 1L;
-			
-			@Override
+
 			public void onSubmit() {
 				
-				String expression = (String) expressionField.getModelObject();
-				String history = (String) historyField.getModelObject();
-				String result = "";
+		        final TextField<String> expressionField = new TextField<String>("expression", Model.of(""));
+				final TextArea<String> historyField = new TextArea<String>("history",  Model.of(""));
+		        
+		        expression = (String) expressionField.getModelObject();
+				history = (String) historyField.getModelObject();
+				
+				String result;
+				
+				try {
+					result = evaluate(expression);
+				} catch(IllegalArgumentException e) {
+					result = "NaN";
+				}
 				
 				if (expression == null) {
 					if (history == null) {
 						history = "";
 					} 
 				} else {
-					try {
-						result = evaluate(expression);
-					} catch(IllegalArgumentException e) {
-						result = "NaN";
-					}
 					if (history == null) {
 						history = String.format("%s%n= %s", expression, result);
 					} else {
@@ -51,26 +58,21 @@ public class Calculator extends WebPage {
 				
 				expressionField.setModel(Model.of(result));
 				historyField.setModel(Model.of(history));
-			}
-		};
-		
-		Button clear = new Button("clearButton") {
+            }
+        });
+        
+        Button clear = new Button("clearButton") {
 
 			private static final long serialVersionUID = 1L;
 
 			public void onSubmit() {
-            	expressionField.setModel(Model.of(""));
+                
             }
         };
-        
         clear.setDefaultFormProcessing(false);
-        form.add(clear);
-		
-		form.add(expressionField);
-		form.add(historyField);
-		add(form);
+        add(clear);
     }
-    
+	
     private String evaluate(String expression) {
     	
     	String[] arguments = expression.split(" ");
@@ -97,7 +99,7 @@ public class Calculator extends WebPage {
 	    			result = result.multiply(argument);
 	    			break;
 	    		case ("/"):
-	    			result = result.divide(argument, PRECISION, RoundingMode.HALF_UP);
+	    			result = result.divide(argument);
 	    			break;    		
 	    		default:
 	    			throw new IllegalArgumentException();
@@ -106,5 +108,5 @@ public class Calculator extends WebPage {
     	    	
     	return result.toString();
     }
-}
 
+}

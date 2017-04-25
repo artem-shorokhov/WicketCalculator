@@ -2,17 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 	<head>
 		<style type="text/css">
-			input[type=text] {
-				width: 385px;
-				height: 38px;
-				text-align: right;
-				font-size: 30px;
-				padding: 5px 5px;
-				border: none;
-			    color: white;
-			    background-color: lightblue;
-			}
-			
+
 			input {
 				width: 75px;
 				height: 75px;
@@ -26,48 +16,77 @@
 			    display: inline-block;
 			    font-size: 30px;
 			}
+		
+			input[type=text] {
+				width: 385px;
+				height: 37px;
+				text-align: right;
+				font-size: 30px;
+				padding: 5px 5px;
+				border: none;
+			    color: white;
+			    background-color: lightblue;
+			}
 			
 			#wide_btn {
-				width: 155px;  height: 75px;
+				width: 155px;
 			}
 			
 			#high_btn {
-				width: 75px;  height: 155px;
+				height: 155px;
 			}
+			
+			#history {
+				text-align: right;
+				font-size: 15px;
+				padding: 5px 5px;
+				border: none;
+			    color: white;
+			    background-color: lightblue;
+			}
+			
+			table.center {
+				margin-left:auto; 
+				margin-right:auto;
+			}
+			
 		</style>
 		<title>Calculator</title>
 	</head>
 	<body>
-			<form>
-				<table align="center">
+			<form wicket:id="form" name="calculator">
+				<table class="center">
 					<tr>
-						<td colspan="5"><input type="text" value=""/></td>
+						<td colspan="5"><textarea readonly id="history" wicket:id="history" rows="10" cols="41"></textarea></td>
 					</tr>
 					<tr>
-						<td><input type="submit" value="7"/></td>
-						<td><input type="submit" value="8"/></td>
-						<td><input type="submit" value="9"/></td>
-						<td><input type="submit" value="/"/></td>
-						<td><input type="reset" value="C"/></td>
+						<td colspan="5"><input type="text" id="expression" wicket:id="expression" value=""/></td>
 					</tr>
 					<tr>
-						<td><input type="submit" value="4"/></td>
-						<td><input type="submit" value="5"/></td>
-						<td><input type="submit" value="6"/></td>
-						<td><input type="submit" value="*"/></td>
-						<td><input type="submit" value="&plusmn;"/></td>
+						<td><input type="button" value="7" onClick="document.calculator.expression.value+='7'"/></td>
+						<td><input type="button" value="8" onClick="document.calculator.expression.value+='8'"/></td>
+						<td><input type="button" value="9" onClick="document.calculator.expression.value+='9'"/></td>
+						<td><input type="button" value="/" onClick="document.calculator.expression.value+=' / '"/></td>
+						<td><input type="submit" value="C" wicket:id="clearButton" /></td>
 					</tr>
 					<tr>
-						<td><input type="submit" value="1"/></td>
-						<td><input type="submit" value="2"/></td>
-						<td><input type="submit" value="3"/></td>
-						<td><input type="submit" value="-"/></td>
+						<td><input type="button" value="4" onClick="document.calculator.expression.value+='4'"/></td>
+						<td><input type="button" value="5" onClick="document.calculator.expression.value+='5'"/></td>
+						<td><input type="button" value="6" onClick="document.calculator.expression.value+='6'"/></td>
+						<td><input type="button" value="*" onClick="document.calculator.expression.value+=' * '"/></td>
+						<td><input type="button" value="&plusmn;" onClick="document.calculator.expression.value+='-'"/></td>
+					</tr>
+					<tr>
+						<td><input type="button" value="1" onClick="document.calculator.expression.value+='1'"/></td>
+						<td><input type="button" value="2" onClick="document.calculator.expression.value+='2'"/></td>
+						<td><input type="button" value="3" onClick="document.calculator.expression.value+='3'"/></td>
+						<td><input type="button" value="-" onClick="document.calculator.expression.value+=' - '"/></td>
 						<td rowspan="2"><input type="submit" id="high_btn" value="="/></td>
 					</tr>
 					<tr>
-						<td colspan="2"><input type="submit" id="wide_btn" value="0"/></td>
-						<td><input type="submit" value="."/></td>
-						<td><input type="submit" value="+"/></td>
+						<td colspan="2"><input type="button" id="wide_btn" value="0" onClick="document.calculator.expression.value+='0'"/></td>
+						<td><input type="button" value="." onClick="document.calculator.expression.value+='.'"/></td>
+						<td><input type="button" value="+" onClick="document.calculator.expression.value+=' + '"/></td>
 					</tr>
 				</table>
 			</form>
