@@ -3,6 +3,8 @@ package org.shorokhov.calculator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.Model;
@@ -153,11 +155,11 @@ public class Calculator extends WebPage {
     	}
 
     	// make output readable
-    	DecimalFormat df = new DecimalFormat();
+    	NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
+    	DecimalFormat df = (DecimalFormat) nf;
     	df.setMaximumFractionDigits(PRECISION);
     	df.setMinimumFractionDigits(0);
     	df.setGroupingUsed(false); 
-    	
     	return df.format(result);
     }
 }
