@@ -30,6 +30,12 @@ import org.apache.wicket.markup.html.form.TextField;
 public class Calculator extends WebPage {
 
 	private static final int PRECISION = 10;
+	
+	private final TextField<String> expressionField;
+	private final TextArea<String> historyField;
+	private final Button equals;
+	private final Button clear;
+	private final Form<?> form;
 
 	/**
 	 * Default constructor which is responsible for the form content.
@@ -37,12 +43,12 @@ public class Calculator extends WebPage {
 	public Calculator() {
 
 		// binding form elements 
-    	final TextField<String> expressionField = new TextField<String>("expression", Model.of(""));
-		final TextArea<String> historyField = new TextArea<String>("history",  Model.of(""));
+    	expressionField = new TextField<String>("expression", Model.of(""));
+		historyField = new TextArea<String>("history",  Model.of(""));
 		
-		Form<?> form = new Form<Object>("form") {
+		// "="-button
+		equals = new Button("equalsButton") {
 			
-			// "="-button action
 			@Override
 			public void onSubmit() {
 				
@@ -73,20 +79,20 @@ public class Calculator extends WebPage {
 			}
 		};
 		
-		form.add(expressionField);
-		form.add(historyField);
-
-		Button clear = new Button("clearButton") {
+		clear = new Button("clearButton") {
 
 			@Override
 			public void onSubmit() {
             	expressionField.setModel(Model.of(""));
             }
-        };
-        
+        };		
         clear.setDefaultFormProcessing(false);
+        
+        form = new Form<Object>("form");
+        form.add(expressionField);
+		form.add(historyField);
         form.add(clear);
-	
+        form.add(equals);
 		add(form);
     }
   
