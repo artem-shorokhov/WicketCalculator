@@ -14,27 +14,41 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 
 /**
- * Class represents calculator implementation using Apache Wicket.
- * 
- * It takes {@code String} expression as an input and calculates it.
- * Expression should consist of decimal numbers and operations
- * separated by spaces. Calculation is performed consequently.
- * In example: 2 + 2 * 2 would be calculated as 8.
- * If expression contains unrecognizable arguments and/or actions,
- * {@code NaN} would be shown as answer. Also it keeps track of
- * expresion history.
+ * Calculator implementation using Apache Wicket.
  * 
  * @author Artem Shorokhov
  */
 @SuppressWarnings("serial")
 public class Calculator extends WebPage {
 
+	/**
+	 * Number of decimal digits.
+	 */
 	private static final int PRECISION = 10;
 	
+	/**
+	 * Expression input / result output field.
+	 */
 	private final TextField<String> expressionField;
+	
+	/**
+	 * History output field.
+	 */
 	private final TextArea<String> historyField;
+	
+	/**
+	 * Equals (=) button.
+	 */
 	private final Button equals;
+	
+	/**
+	 * Clear (C) button.
+	 */
 	private final Button clear;
+	
+	/**
+	 * Whole calculator form.
+	 */
 	private final Form<?> form;
 
 	/**
@@ -97,14 +111,19 @@ public class Calculator extends WebPage {
     }
   
 	/**
-	 * Method takes {@code String} expression as an input and calculates it.
+	 * Calculates result of {@code String} expression.
 	 * Expression should consist of decimal numbers and operations
 	 * separated by spaces. Calculation is performed consequently.
 	 * In example: 2 + 2 * 2 would be calculated as 8.
 	 * 
-	 * @param expression {@code String} representation of expression obtained from input field.
-	 * @return {@code String} representation of expression calculation.
-	 * @throws IllegalArgumentException if expression contains unrecognizable arguments and/or actions.
+	 * @param expression {@code String} representation of
+	 *                   expression obtained from input field
+	 *                   
+	 * @return {@code String} representation of expression result
+	 * 
+	 * @throws IllegalArgumentException if expression contains
+	 *                                  unrecognizable arguments
+	 *                                  and/or operations
 	 */
     private String calculate(String expression) {
     	
@@ -160,7 +179,7 @@ public class Calculator extends WebPage {
     		}
     	}
 
-    	// make output readable
+    	// making output format proper
     	NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
     	DecimalFormat df = (DecimalFormat) nf;
     	df.setMaximumFractionDigits(PRECISION);
