@@ -28,7 +28,7 @@
 	      <resource>
 	        <directory>src\org\shorokhov\calculator</directory>
 		    <includes>
-		    	<include>*.html</include>
+		    	<include>**/*.html</include>
 			</includes>
 			</resource>
     	</resources>
